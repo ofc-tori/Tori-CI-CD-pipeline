@@ -19,7 +19,7 @@ jobs:
           msbuild-version: 'latest'
 
       - name: Build application
-        run: msbuild "./ComicWebsite/Comic Website.sln" /p:Configuration=Release
+        run: msbuild "./ComicWebsite/ComicWebsite/Comic Website.sln" /p:Configuration=Release
   test:
     needs: build
     runs-on: windows-latest
