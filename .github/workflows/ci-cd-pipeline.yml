@@ -72,4 +72,15 @@ jobs:
           author_name: 'GitHub Actions'
           color: '#FF0000'  # Red color
         env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL 
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+      
+      - name: Notify on success
+        if: ${{ success() }}
+        uses: rtCamp/action-slack-notify@v2
+        with:
+          status: 'success'
+          text: 'The CI/CD pipeline ran successfully.'
+          author_name: 'GitHub Actions'
+          color: '#00FF00'  # Green color
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
