@@ -53,7 +53,7 @@ jobs:
           msbuild-version: 'latest'
 
       - name: Build application
-        run: msbuild ./ComicWebsite/Comic Website.sln /p:Configuration=Release
+        run: msbuild ./WebApplication1/WebApplication1.sln /p:Configuration=Release
 
       - name: Deploy to staging (replace with actual deployment steps)
         run: echo "Deploying to staging..."

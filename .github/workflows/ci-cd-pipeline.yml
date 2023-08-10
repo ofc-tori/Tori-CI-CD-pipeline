@@ -57,3 +57,18 @@ jobs:
 
       - name: Deploy to staging (replace with actual deployment steps)
         run: echo "Deploying to staging..."
+
+notify:
+    needs: [build, test, deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify on failure
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@v2
+        with:
+          status: 'failure'
+          text: 'A build or deployment failed in the CI/CD pipeline.'
+          author_name: 'GitHub Actions'
+          color: '#FF0000'  # Red color
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
