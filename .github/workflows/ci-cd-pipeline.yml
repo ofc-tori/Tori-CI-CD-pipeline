@@ -60,27 +60,15 @@ jobs:
         run: echo "Deploying to staging..."
 
   notify:
-    needs: [build, test, deploy]
+    name: Notify team on success
     runs-on: windows-latest
+    needs: [build, test, deploy]
+
     steps:
-      - name: Notify on failure
-        if: ${{ failure() }}
-        uses: rtCamp/action-slack-notify@v2
-        with:
-          status: 'failure'
-          text: 'A build or deployment failed in the CI/CD pipeline.'
-          author_name: 'GitHub Actions'
-          color: '#FF0000'  # Red color
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-      
-      - name: Notify on success
-        if: ${{ success() }}
-        uses: rtCamp/action-slack-notify@v2
-        with:
-          status: 'success'
-          text: 'The CI/CD pipeline ran successfully.'
-          author_name: 'GitHub Actions'
-          color: '#00FF00'  # Green color
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Check for build, test, or deployment success
+        id: Check-status
+        run: echo "Build, test, and deployment successful!"
+
+      - name: Send notification on success
+        if: steps.build.outcome == 'success' && steps.test.outcome == 'success' && steps.deploy.outcome == 'success'
+        run: echo "Build, test, and deployment successful! Notify the team"
