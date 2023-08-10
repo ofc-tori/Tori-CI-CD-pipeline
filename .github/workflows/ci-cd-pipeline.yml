@@ -59,6 +59,8 @@ jobs:
       - name: Deploy to staging (replace with actual deployment steps)
         run: echo "Deploying to staging..."
 
+#notify comment/commands
+
   notify:
     name: Notify team on success
     runs-on: windows-latest
