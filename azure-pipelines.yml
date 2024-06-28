@@ -1,0 +1,79 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  branches:
+    include:
+      - main
+      - feature/*
+ 
+pool:
+  vmImage: 'ubuntu-latest'
+ 
+variables:
+  buildConfiguration: 'Release'
+ 
+steps:
+- task: UseNode@2
+  inputs:
+    version: '14.x'
+ 
+- script: |
+    npm install
+    npm run build
+  displayName: 'Install dependencies and build'
+ 
+- script: npm test
+  displayName: 'Run tests'
+ 
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/test-results.xml'
+    failTaskOnFailedTests: true
+ 
+ 
+ 
+GITHUB
+ 
+name: CI
+ 
+on:
+  push:
+    branches:
+      - main
+      - feature/*
+  pull_request:
+    branches:
+      - main
+ 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+ 
+    steps:
+    - uses: actions/checkout@v2
+ 
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+ 
+    - run: npm install
+      name: Install dependencies
+ 
+    - run: npm run build
+      name: Build
+ 
+    - run: npm test
+      name: Test
+ 
+    - name: Publish Test Results
+      if: always()
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-results
+        path: '**/test-results.xml'
+
